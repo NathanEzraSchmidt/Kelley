@@ -1,8 +1,8 @@
 # Kelley
 ```
 
->>> get_kelley_bet([52,48], [1,-1]) # coinflip wikipedia example
-((0.04, 25), 0.000800533726201369)
+>>> get_kelley_bet([60,40], [1,-1]) # coinflip wikipedia example
+((0.2, 5), 0.02033960050063266)
 >>> get_kelley_bet([0.977470,1-0.977470], [1,-40]) # dragon
 ((0.0019083969465648854, 524), 7.459114449925863e-05)
 >>> get_kelley_bet([3328, 1664, 1456, 79872], [-6, -12, -25, 1]) # perfect pair, 8 deck
