@@ -8,9 +8,6 @@ def get_variance(combs=(48,52,720,1096,3744,16440), payouts=(40,30,6,3,1,-1), m=
     else: # combs is list of probabilites, m should be >= 1/min(combs)
         combs = [int(round(i*m)) for i in combs]
     y = []
-    print(combs)
-    print(payouts)
-    
     for i,j in zip(combs, payouts):
         y += [j]*i
     return statistics.variance(y)
