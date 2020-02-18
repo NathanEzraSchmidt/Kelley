@@ -13,7 +13,6 @@ def get_variance(combs=(48,52,720,1096,3744,16440), payouts=(40,30,6,3,1,-1), m=
     
     for i,j in zip(combs, payouts):
         y += [j]*i
-    print(len(y))
     return statistics.variance(y)
 
 def get_ev(combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1)):
