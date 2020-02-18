@@ -16,7 +16,6 @@ def get_variance(combs=(48,52,720,1096,3744,16440), payouts=(40,30,6,3,1,-1), m=
     print(len(y))
     return statistics.variance(y)
 
-
 def get_ev(combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1)):
     y = 0
     for i,j in zip(combs, payouts):
@@ -55,7 +54,6 @@ def get_kelley_bet(combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,
     """
     
     s = sum(combs)
-##    n = len(payouts)
     w = payouts
     if combs[0] >= 1:
         p = [i/s for i in combs]
@@ -151,7 +149,6 @@ def f(c=-1):
                 print(0)
             print("")
 
-
 def sim_growth(trials=1000, trial_len=10000, combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1), bet_frac=1/147):
     br = 1
     y = [0]
@@ -179,7 +176,6 @@ def sim_growth(trials=1000, trial_len=10000, combs=(48,52,720,1096,3744,16440), 
                 break
         br_total += br
     return t / trials, br_total / trials
-
 
 def kelley_multiply(trials=1000, combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1), bet_frac=1/147, m=2):
     # returns average number of trials to multiply roll by m
