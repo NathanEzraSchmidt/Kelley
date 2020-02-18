@@ -47,8 +47,9 @@ def kelley(b, w, p):
 
 def get_kelley_bet(combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1), m=100000):
     """
-    given a list of payouts on a "to one" basis, and corresponding list either combination totals or probabilites
-    returns the optimal fraction within precision of 1/m of a bankroll to bet according to kelley, and expected bankroll growth after 1 bet
+    given a list of payouts on a "to one" basis, and a corresponding list of either combination totals or probabilites,
+    returns the optimal fraction within precision of 1/m of a bankroll to bet according to kelley, and expected bankroll growth after one bet
+
     in other words, given values for w and p returns the value for b which maximizes kelley(b, w, p), and expected bankroll growth after one bet
     
     """
@@ -73,6 +74,8 @@ def get_kelley_bet(combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,
             continue
     return bet, r
 
+""" common bonus probabilites and payouts: """
+
 #buster
 buster_payouts = (-2,-2,-4,-16,-50,-200,1)
 buster_probs = 0.1730318431697958, 0.08939180973343368, 0.020472550873558974, 0.0026376021859951643, 0.000214444168179472, 1.1945253825662186e-05, 0.7142398046152112
@@ -94,6 +97,60 @@ pairplus_payouts=(-40,-30,-6,-3,-1,1)
 
 uth = 4324, 37260, 224848, 3473184, 4047644, 6180020, 6461620, 113355660
 uth_p = -50, -40, -30, -8, -7, -4, -3, 1
+
+#baccarat:  banker, player, tie, dragon, panda:
+
+bacc_probs = 0.4360636017719899, 0.44624660934314253, 0.09515596802363312, 0.022533820860378088, 0.034543218396415824
+bacc_probs = 0.4360636017719899, 0.4117033909467267, 0.09515596802363312, 0.022533820860378088, 0.034543218396415824 # banker no dragon, player no panda
+
+def get_kelley_bacc(b=[100,100,10,20,20], probs=bacc_probs, c=-1, m=1000000):
+    # c is commission
+    # get payouts from bets and c:
+
+    s = sum(b)
+
+    x = 5, 9, 16, 26, 46
+    if c < 0:
+        if s < 301:
+            c = 5
+        elif s < 1201:
+            c = 9
+        elif s < 3601:
+            c = 16
+        elif s < 7201:
+            c = 26
+        else:
+            c = 46
+
+    banker = s - 2*b[0] - c
+    player = s - 2*b[1] - c # no panda
+    tie = b[3] + b[4] - 8*b[2] - c
+    dragon = s - b[0] - 41*b[3]
+    panda = s - 2*b[1] - 26*b[4] - c
+    payouts=[banker, player, tie, dragon, panda]
+
+    p = payouts
+    x = probs
+
+    ev = 0
+    for i in range(5):
+        ev += p[i]*x[i]
+    print(round(ev,4),round(ev / s,4))
+
+    return get_kelley_bet(combs=bacc_probs, payouts=payouts, m=m)
+
+def f(c=-1):
+    for i in range(250, 2750, 250):
+        for j in range(0,250, 50):
+            print('banker =', i)
+            print('dragon =', j)
+            x = get_kelley_bacc([i,0,0,j,j],c=c)
+            try:
+                print(x[0][1])
+            except:
+                print(0)
+            print("")
+
 
 def sim_growth(trials=1000, trial_len=10000, combs=(48,52,720,1096,3744,16440), payouts=(-40,-30,-6,-3,-1,1), bet_frac=1/147):
     br = 1
@@ -145,7 +202,6 @@ def kelley_multiply(trials=1000, combs=(48,52,720,1096,3744,16440), payouts=(-40
                 if n < y[j]:
                     r = payouts[j-1]
                     br += r * bet
-##                    print(br)
                     break
             if br >= m:
                 print(i)
